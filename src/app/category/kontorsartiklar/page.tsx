@@ -9,13 +9,13 @@ export default function OfficeSuppliesPage() {
       <div className="max-w-6xl mx-auto px-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="aspect-square bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+            <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
               <span className="text-6xl">📝</span>
             </div>
             <div className="p-6">
               <h3 className="font-bold text-lg text-gray-900 mb-2">Anteckningsböcker</h3>
               <p className="text-gray-600 text-sm mb-3">Personaliserade anteckningsböcker för kontoret eller skolan.</p>
-              <p className="font-semibold text-blue-600">från 149 SEK</p>
+              <p className="font-semibold text-black">från 149 SEK</p>
             </div>
           </div>
 
@@ -26,7 +26,7 @@ export default function OfficeSuppliesPage() {
             <div className="p-6">
               <h3 className="font-bold text-lg text-gray-900 mb-2">Kalendrar</h3>
               <p className="text-gray-600 text-sm mb-3">Väggkalendrar och skrivbordskalendrar med egen design.</p>
-              <p className="font-semibold text-blue-600">från 199 SEK</p>
+              <p className="font-semibold text-black">från 199 SEK</p>
             </div>
           </div>
 
@@ -37,7 +37,7 @@ export default function OfficeSuppliesPage() {
             <div className="p-6">
               <h3 className="font-bold text-lg text-gray-900 mb-2">Pennor & Markers</h3>
               <p className="text-gray-600 text-sm mb-3">Anpassade pennor och markers för företag och event.</p>
-              <p className="font-semibold text-blue-600">från 29 SEK</p>
+              <p className="font-semibold text-black">från 29 SEK</p>
             </div>
           </div>
         </div>

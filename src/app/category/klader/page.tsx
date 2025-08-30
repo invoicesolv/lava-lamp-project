@@ -28,7 +28,7 @@ export default function ClothingCategoryPage() {
               <div className="p-6">
                 <h3 className="font-bold text-lg text-gray-900 mb-2">{product.name}</h3>
                 <p className="text-gray-600 text-sm mb-3">{product.shortDescription}</p>
-                <p className="font-semibold text-blue-600">
+                <p className="font-semibold text-black">
                   från {product.price.base} {product.price.currency}
                 </p>
               </div>
@@ -42,7 +42,7 @@ export default function ClothingCategoryPage() {
           </div>
         )}
 
-        <div className="mt-16 bg-blue-50 rounded-lg p-8">
+        <div className="mt-16 bg-gray-50 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Varför välja våra kläder?</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>

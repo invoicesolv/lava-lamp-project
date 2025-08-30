@@ -26,7 +26,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <div className="flex items-center space-x-4">
               <Link 
                 href="/" 
-                className="text-blue-600 hover:text-blue-800 font-medium"
+                className="text-black hover:text-gray-900 font-medium"
               >
                 ← Tillbaka till startsidan
               </Link>
@@ -54,7 +54,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   onClick={() => setSelectedImage(image)}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                     selectedImage === image 
-                      ? 'border-blue-600 ring-2 ring-blue-200' 
+                      ? 'border-black ring-2 ring-gray-200' 
                       : 'border-gray-200 hover:border-gray-300 hover:scale-105'
                   }`}
                 >
@@ -104,7 +104,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     onClick={() => setSelectedSize(size)}
                     className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
                       selectedSize === size
-                        ? 'border-blue-600 bg-blue-50 text-blue-600'
+                        ? 'border-black bg-gray-50 text-black'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
@@ -126,7 +126,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     onClick={() => setSelectedColor(color)}
                     className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
                       selectedColor === color
-                        ? 'border-blue-600 bg-blue-50 text-blue-600'
+                        ? 'border-black bg-gray-50 text-black'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
@@ -162,7 +162,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             {/* Action Buttons */}
             <div className="space-y-4 pt-6">
-              <button className="w-full bg-blue-600 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+              <button className="w-full bg-black text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors">
                 Börja designa
               </button>
               <button className="w-full border border-gray-300 text-gray-900 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors">

@@ -31,7 +31,7 @@ export default function Sections() {
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Designa t-shirts, kepsar, hoodies och mycket mer direkt online. Ladda upp loggor, texter eller bilder och se resultatet direkt i vårt designverktyg.
           </p>
-          <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors mb-4">
+          <button className="bg-black text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors mb-4">
             👉 Testa redan idag
           </button>
           <p className="text-gray-500">Från 1 produkt till hundratals · 5-7 dagars leverans · Inga minimiordrar</p>
@@ -52,7 +52,7 @@ export default function Sections() {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Creators */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full mx-auto mb-6 flex items-center justify-center">
                 <span className="text-2xl">🎨</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Skapare och designers</h3>
@@ -138,7 +138,7 @@ export default function Sections() {
               { step: '5', title: 'Slappna av', desc: 'Vi sköter resten' }
             ].map((item, index) => (
               <div key={index}>
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full mx-auto mb-4 flex items-center justify-center text-xl font-bold">
+                <div className="w-16 h-16 bg-black text-white rounded-full mx-auto mb-4 flex items-center justify-center text-xl font-bold">
                   {item.step}
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
@@ -201,7 +201,7 @@ export default function Sections() {
             Till skillnad från traditionella tryckerier slipper du krångliga offertförfrågningar, långa leveranstider och stora minimiordrar. Här är allt digitalt, modernt och transparent – du ser priset direkt och kan själv skapa något unikt på bara några minuter.
           </p>
           <div className="text-center">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+            <button className="bg-black text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors">
               👉 Upptäck hur enkelt det är
             </button>
           </div>
@@ -268,12 +268,12 @@ export default function Sections() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-blue-600 text-white text-center">
+      <section className="py-20 bg-black text-white text-center">
         <div className="max-w-4xl mx-auto px-8">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Starta din egen print-on-demand verksamhet!
           </h2>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
+          <button className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
             Börja designa
           </button>
         </div>

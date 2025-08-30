@@ -61,7 +61,7 @@ export default function BulkOrdersPage() {
           <p className="text-gray-600 mb-6">
             Kontakta oss för en skräddarsydd offert baserad på dina behov.
           </p>
-          <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+          <button className="bg-black text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors">
             Begär offert
           </button>
         </div>

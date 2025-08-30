@@ -23,7 +23,7 @@ function Navbar({ className }: { className?: string }) {
       <div className="flex items-center justify-between w-full">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2 z-50">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">P</span>
           </div>
           <span className="font-bold text-lg text-gray-900 dark:text-white">PrintDesign</span>
@@ -64,6 +64,14 @@ function Navbar({ className }: { className?: string }) {
               </div>
             </MenuItem>
             
+            <MenuItem setActive={setActive} active={active} item="Design">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="/design/upload">Ladda upp design</HoveredLink>
+                <HoveredLink href="/design/canvas">Canvas designer</HoveredLink>
+                <HoveredLink href="/products">Välj produkt</HoveredLink>
+              </div>
+            </MenuItem>
+            
             <MenuItem setActive={setActive} active={active} item="Support">
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="/how-it-works">Så fungerar det</HoveredLink>
@@ -86,7 +94,7 @@ function Navbar({ className }: { className?: string }) {
           </Link>
           <Link 
             href="/register" 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             Registrera dig
           </Link>
