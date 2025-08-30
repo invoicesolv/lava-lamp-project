@@ -120,3 +120,55 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Product Cards Expansion Effect */
+.product-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  height: 400px; /* Fixed height for consistent card sizes */
+}
+
+.product-item {
+  flex: 1;
+  min-width: 280px;
+  transition: all 0.5s ease-out;
+  position: relative;
+  cursor: pointer;
+  height: 100%;
+}
+
+.product-item:hover {
+  flex: 3 !important;
+  z-index: 10;
+}
+
+/* Override GlareCard fixed width to make it responsive */
+.product-item > div {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none; /* Allow hover to work on parent */
+}
+
+.product-item > div > div {
+  pointer-events: auto; /* Re-enable events on GlareCard */
+}
+
+.product-content {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  transition-delay: 0.2s;
+  pointer-events: auto;
+}
+
+.product-item:hover .product-content {
+  opacity: 1;
+}
+
+/* Navbar shadow utility */
+.shadow-input {
+  box-shadow: 0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08);
+}

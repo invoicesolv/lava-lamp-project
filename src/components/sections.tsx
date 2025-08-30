@@ -1,23 +1,40 @@
+'use client';
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { GlareCard } from '@/components/ui/glare-card';
+import { products } from '@/data/products';
 
 export default function Sections() {
+  const router = useRouter();
+  
+  const handleProductClick = (productId: string) => {
+    console.log('Clicking product:', productId);
+    try {
+      router.push(`/products/${productId}`);
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback to window.location
+      window.location.href = `/products/${productId}`;
+    }
+  };
+  
   return (
     <div className="bg-white">
       {/* Main CTA Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="pt-28 pb-20 bg-gray-50">
         <div className="max-w-4xl mx-auto text-center px-8">
           <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Print on Demand –<br />
-            starta din online-verksamhet
+            Skapa dina egna kläder –<br />
+            snabbt, enkelt och unikt
           </h2>
           <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Sälj anpassade tryckta produkter på beställning utan någon förskottsinvestering eller ansvar för orderhantering.
+            Designa t-shirts, kepsar, hoodies och mycket mer direkt online. Ladda upp loggor, texter eller bilder och se resultatet direkt i vårt designverktyg.
           </p>
           <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors mb-4">
-            Börja designa
+            👉 Testa redan idag
           </button>
-          <p className="text-gray-500">100% Gratis · Lätt att använda · 1 300+ Produkter</p>
+          <p className="text-gray-500">Från 1 produkt till hundratals · 5-7 dagars leverans · Inga minimiordrar</p>
         </div>
       </section>
 
@@ -71,86 +88,33 @@ export default function Sections() {
 
       {/* Products Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-full mx-auto px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
             Kom igång gratis!
           </h2>
           
-          <div className="flex flex-wrap justify-center gap-8">
-            <GlareCard className="flex flex-col items-center justify-end p-6">
-              <img
-                className="h-full w-full absolute inset-0 object-cover"
-                src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop"
-                alt="T-shirt"
-              />
-              <div className="relative z-10 text-center">
-                <h3 className="font-bold text-white text-lg mb-2">Unisex Jersey T-shirt</h3>
-                <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                  Börja designa
-                </button>
-              </div>
-            </GlareCard>
-            
-            <GlareCard className="flex flex-col items-center justify-end p-6">
-              <img
-                className="h-full w-full absolute inset-0 object-cover"
-                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop"
-                alt="Hoodie"
-              />
-              <div className="relative z-10 text-center">
-                <h3 className="font-bold text-white text-lg mb-2">Heavy Blend™ Hoodie</h3>
-                <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                  Börja designa
-                </button>
-              </div>
-            </GlareCard>
-            
-            <GlareCard className="flex flex-col items-center justify-end p-6">
-              <img
-                className="h-full w-full absolute inset-0 object-cover"
-                src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?q=80&w=1000&auto=format&fit=crop"
-                alt="Socks"
-              />
-              <div className="relative z-10 text-center">
-                <h3 className="font-bold text-white text-lg mb-2">Premium Strumpor</h3>
-                <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                  Börja designa
-                </button>
-              </div>
-            </GlareCard>
-            
-            <GlareCard className="flex flex-col items-center justify-center">
-              <svg
-                width="66"
-                height="65"
-                viewBox="0 0 66 65"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-20 w-20 text-white mb-4"
+          <div className="product-container">
+            {products.map((product) => (
+              <div 
+                key={product.id} 
+                className="product-item"
+                onClick={() => handleProductClick(product.id)}
               >
-                <path
-                  d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
-                  stroke="currentColor"
-                  strokeWidth="15"
-                  strokeMiterlimit="3.86874"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <h3 className="font-bold text-white text-lg mb-2">Telefonfodral</h3>
-              <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Börja designa
-              </button>
-            </GlareCard>
-            
-            <GlareCard className="flex flex-col items-start justify-end p-6">
-              <h3 className="font-bold text-white text-xl mb-2">Canvas Prints</h3>
-              <p className="font-normal text-base text-neutral-200 mb-4">
-                Högkvalitativa canvas-tryck för hem och kontor. Perfekt för konst och fotografier.
-              </p>
-              <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Börja designa
-              </button>
-            </GlareCard>
+                <GlareCard className="flex flex-col items-center justify-end p-6 h-full">
+                  <img
+                    className="h-full w-full absolute inset-0 object-cover"
+                    src={product.images.main}
+                    alt={product.name}
+                  />
+                  <div className="relative z-10 text-center product-content">
+                    <h3 className="font-bold text-white text-lg mb-2">{product.name}</h3>
+                    <div className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors inline-block">
+                      Visa produkt
+                    </div>
+                  </div>
+                </GlareCard>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -224,21 +188,21 @@ export default function Sections() {
         </div>
       </section>
 
-      {/* What is POD Section */}
+      {/* Detailed Description Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
-            Vad är Print on Demand?
+            Enkelt att förverkliga dina idéer
           </h2>
           <p className="text-lg text-gray-600 mb-6">
-            Print on Demand (POD) är en uppfyllelseprocess som dropshippar produkter till kunder först efter att en försäljning går igenom. Detta innebär att merchandise aldrig kommer att kräva hantering, lagring eller skydd.
+            Vi vill göra det enkelt för alla att ta fram personliga plagg och accessoarer, oavsett om det gäller företag, event, svensexor, skolklasser eller bara en kul present. Beställ precis så många du vill – från 1 produkt till hundratals – och få allt levererat hem till dörren på bara 5–7 dagar.
           </p>
           <p className="text-lg text-gray-600 mb-8">
-            Du kan trycka kvantiteter av anpassad merchandise utan lagerhantering genom att skicka den direkt till kunder. Denna uppfyllelsemodell tillåter en kund att köpa produkter i din butik och ordern går direkt till tryckprovidern. Detta eliminerar behovet av orderuppfyllelse och lagringsutrymme.
+            Till skillnad från traditionella tryckerier slipper du krångliga offertförfrågningar, långa leveranstider och stora minimiordrar. Här är allt digitalt, modernt och transparent – du ser priset direkt och kan själv skapa något unikt på bara några minuter.
           </p>
           <div className="text-center">
             <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
-              Börja sälja
+              👉 Upptäck hur enkelt det är
             </button>
           </div>
         </div>
