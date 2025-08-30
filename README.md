@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌊 Lava Lamp Project - Interactive Print-on-Demand Website
 
-## Getting Started
+A stunning, interactive website featuring fluid blob animations, holographic product cards, and dynamic search functionality. Built with Next.js, React Three.js, and Tailwind CSS.
 
-First, run the development server:
+![Website Preview](https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=400&fit=crop)
+
+## ✨ Features
+
+### 🎨 Visual Effects
+- **Fluid Lava Lamp Animation** - Real-time 3D blob morphing using GLSL shaders
+- **Holographic Product Cards** - Interactive cards with rainbow glare effects
+- **Mix-blend-exclusion Text** - Dynamic text that inverts based on background
+- **3D Mouse Tracking** - Cards tilt and rotate following cursor movement
+
+### 🔍 Interactive Elements  
+- **Dynamic Search Field** - Real-time search with glassmorphism design
+- **Responsive Title Updates** - Title changes as you type
+- **Smooth Animations** - Butter-smooth transitions and hover effects
+- **Mobile-First Design** - Fully responsive across all devices
+
+### 🛍️ E-commerce Ready
+- **Swedish Content** - Localized for Swedish print-on-demand market
+- **Product Showcase** - Interactive product cards with CTAs
+- **Business Sections** - Complete landing page structure
+- **Call-to-Actions** - Strategic placement for conversions
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/invoicesolv/lava-lamp-project.git
+cd lava-lamp-project
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the website.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Core Framework
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
 
-## Learn More
+### 3D & Animations
+- **React Three.js** - 3D graphics and WebGL
+- **@react-three/fiber** - React renderer for Three.js
+- **GLSL Shaders** - Custom vertex and fragment shaders
 
-To learn more about Next.js, take a look at the following resources:
+### UI Components
+- **shadcn/ui** - Beautiful, accessible component library
+- **Lucide React** - Clean, consistent icons
+- **Custom GlareCard** - Holographic effect component
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+lava-lamp-project/
+├── src/
+│   ├── app/
+│   │   ├── globals.css      # Global styles and CSS variables
+│   │   ├── layout.tsx       # App layout wrapper
+│   │   └── page.tsx         # Main page entry point
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── fluid-blob.tsx    # 3D lava lamp animation
+│   │   │   └── glare-card.tsx    # Holographic product cards
+│   │   ├── demo.tsx         # Hero section with search
+│   │   └── sections.tsx     # Content sections
+│   └── lib/
+│       └── utils.ts         # Utility functions
+├── components.json          # shadcn/ui configuration
+└── tailwind.config.js       # Tailwind CSS config
+```
 
-## Deploy on Vercel
+## 🎮 Interactive Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Fluid Blob Animation
+Real-time morphing 3D shapes created with:
+- **Ray marching** for smooth surfaces
+- **Signed distance functions** for blob merging
+- **Dynamic rotation** with time-based animation
+- **Mix-blend modes** for text visibility
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### GlareCard Effects
+Holographic cards featuring:
+- **Mouse position tracking**
+- **3D rotation transforms**
+- **Rainbow gradient overlays**
+- **Smooth hover transitions**
+
+### Dynamic Search
+Interactive search experience with:
+- **Real-time title updates**
+- **Glassmorphism styling**
+- **Responsive design**
+- **Accessibility features**
+
+## 🌐 Content Sections
+
+- **Hero Section** - Fluid animation with search
+- **Value Propositions** - Target audience segments  
+- **Product Showcase** - Interactive holographic cards
+- **Process Steps** - How it works guide
+- **Features Grid** - Key selling points
+- **FAQ Section** - Print-on-demand explanation
+- **Call-to-Actions** - Multiple conversion points
+
+## 🚀 Deployment
+
+The project is configured for easy deployment on:
+
+### Vercel (Recommended)
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+### Netlify
+```bash
+npm run build
+# Deploy dist folder
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to:
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+Built with ❤️ for the Swedish print-on-demand market
