@@ -21,45 +21,45 @@ export default function HowItWorksPage() {
   const steps = [
     {
       icon: <Upload className="h-8 w-8" />,
-      title: "Upload Your Design",
-      description: "Upload your artwork, logo, or choose from our design templates. We accept PNG, JPG, PDF, and SVG files.",
-      details: ["High-resolution files recommended", "Multiple file formats supported", "Free design templates available"]
+      title: "Ladda upp din design",
+      description: "Ladda upp ditt konstverk, logotyp eller välj från våra designmallar. Vi accepterar PNG, JPG, PDF och SVG-filer.",
+      details: ["Högupplösta filer rekommenderas", "Flera filformat stöds", "Gratis designmallar tillgängliga"]
     },
     {
       icon: <Palette className="h-8 w-8" />,
-      title: "Customize Your Product",
-      description: "Choose your product, colors, sizes, and see a live preview of how your design will look.",
-      details: ["Real-time preview", "Multiple product options", "Various sizes and colors"]
+      title: "Anpassa din produkt",
+      description: "Välj din produkt, färger, storlekar och se en live-förhandsvisning av hur din design kommer att se ut.",
+      details: ["Realtidsförhandsvisning", "Flera produktalternativ", "Olika storlekar och färger"]
     },
     {
       icon: <ShoppingCart className="h-8 w-8" />,
-      title: "Place Your Order",
-      description: "Add to cart, review your order, and complete your purchase securely through our platform.",
-      details: ["Secure payment processing", "Order confirmation", "Digital receipt"]
+      title: "Lägg din beställning",
+      description: "Lägg till i varukorgen, granska din beställning och slutför ditt köp säkert genom vår plattform.",
+      details: ["Säker betalningshantering", "Beställningsbekräftelse", "Digital kvitto"]
     },
     {
       icon: <Truck className="h-8 w-8" />,
-      title: "We Print & Ship",
-      description: "We print your custom products on-demand and ship them directly to your customers or to you.",
-      details: ["High-quality printing", "Fast turnaround", "Global shipping available"]
+      title: "Vi trycker & skickar",
+      description: "Vi trycker dina anpassade produkter på begäran och skickar dem direkt till dina kunder eller till dig.",
+      details: ["Högkvalitativ tryckning", "Snabb leverans", "Global frakt tillgänglig"]
     }
   ];
 
   const features = [
     {
       icon: <Star className="h-6 w-6" />,
-      title: "Premium Quality",
-      description: "Professional-grade printing with vibrant, long-lasting colors"
+      title: "Premiumkvalitet",
+      description: "Professionell tryckkvalitet med livliga, långvariga färger"
     },
     {
       icon: <Users className="h-6 w-6" />,
-      title: "White Label",
-      description: "Your brand, your packaging - we stay invisible to your customers"
+      title: "Vit etikett",
+      description: "Ditt varumärke, din förpackning - vi håller oss osynliga för dina kunder"
     },
     {
       icon: <Clock className="h-6 w-6" />,
-      title: "Fast Turnaround",
-      description: "Most orders printed and shipped within 2-3 business days"
+      title: "Snabb leverans",
+      description: "De flesta beställningar trycks och skickas inom 2-3 arbetsdagar"
     }
   ];
 
@@ -69,21 +69,21 @@ export default function HowItWorksPage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            How It Works
+            Så fungerar det
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Our print-on-demand process is simple, efficient, and designed to help you 
-            create amazing custom products without any upfront investment or inventory management.
+            Vår tryck-på-begäran-process är enkel, effektiv och utformad för att hjälpa dig 
+            skapa fantastiska anpassade produkter utan någon initial investering eller lagerhantering.
           </p>
           <Badge variant="outline" className="text-sm px-4 py-2">
             <CheckCircle className="mr-2 h-4 w-4" />
-            No Minimum Orders • No Upfront Costs • Global Shipping
+            Inga minsta beställningar • Inga initiala kostnader • Global frakt
           </Badge>
         </div>
 
         {/* Process Steps */}
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">Simple 4-Step Process</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Enkel 4-stegsprocess</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <Card key={index} className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
@@ -119,7 +119,7 @@ export default function HowItWorksPage() {
 
         {/* Key Features */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our Platform?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Varför välja vår plattform?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="text-center hover:shadow-md transition-shadow">
@@ -137,21 +137,21 @@ export default function HowItWorksPage() {
 
         {/* CTA Section */}
         <div className="text-center bg-muted/30 rounded-2xl p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+          <h2 className="text-3xl font-bold mb-4">Redo att komma igång?</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start creating your custom products today. No setup fees, no minimum orders, 
-            and no long-term commitments required.
+            Börja skapa dina anpassade produkter idag. Inga installationsavgifter, inga minsta beställningar, 
+            och inga långsiktiga åtaganden krävs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link href="/products">
-                Browse Products
+              <Link href="/produkter">
+                Bläddra produkter
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link href="/contact">
-                Get Support
+                Få support
               </Link>
             </Button>
           </div>

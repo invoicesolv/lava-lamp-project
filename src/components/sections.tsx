@@ -2,282 +2,892 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { GlareCard } from '@/components/ui/glare-card';
-import { products } from '@/data/products';
+import { bulkProducts } from '@/data/bulk-products';
+import { ProductListSchemaMarkup } from '@/components/schema-markup';
+import { Heart } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
 
 export default function Sections() {
   const router = useRouter();
+  const { addToCart } = useCart();
   
   const handleProductClick = (productId: string) => {
     console.log('Clicking product:', productId);
     try {
-      router.push(`/products/${productId}`);
+      router.push(`/produkter/${productId}`);
     } catch (error) {
       console.error('Navigation error:', error);
       // Fallback to window.location
-      window.location.href = `/products/${productId}`;
+      window.location.href = `/produkter/${productId}`;
     }
   };
+
+  // Group products by category
+  const productsByCategory = {
+    'Kläder': bulkProducts.filter(p => p.category === 'Kläder').slice(0, 4),
+    'Accessoarer': bulkProducts.filter(p => p.category === 'Accessoarer').slice(0, 4),
+    'Hem & Inredning': bulkProducts.filter(p => p.category === 'Hem & Inredning').slice(0, 4),
+    'Kontorsartiklar': bulkProducts.filter(p => p.category === 'Kontorsartiklar').slice(0, 4)
+  };
+  
+  // Get all featured products for schema
+  const allFeaturedProducts = Object.values(productsByCategory).flat();
   
   return (
-    <div className="bg-white">
-      {/* Main CTA Section */}
-      <section className="pt-28 pb-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-center px-8">
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Skapa dina egna kläder –<br />
-            snabbt, enkelt och unikt
-          </h2>
-          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Designa t-shirts, kepsar, hoodies och mycket mer direkt online. Ladda upp loggor, texter eller bilder och se resultatet direkt i vårt designverktyg.
-          </p>
-          <button className="bg-black text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors mb-4">
-            👉 Testa redan idag
-          </button>
-          <p className="text-gray-500">Från 1 produkt till hundratals · 5-7 dagars leverans · Inga minimiordrar</p>
-        </div>
-      </section>
-
-      {/* Target Audiences */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-center text-gray-900 mb-16">
-            Alla kan vara chef med<br />
-            Print on Demand
-          </h2>
-          <p className="text-center text-gray-600 mb-12 text-lg">
-            Oavsett om du säljer till en eller tusentals, vi har dig täckt
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Creators */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gray-100 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🎨</span>
+    <>
+      <ProductListSchemaMarkup products={allFeaturedProducts} />
+      <div className="bg-white">
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-50" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f3f4f6' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                🎉 SUPER SEPTEMBER - Upp till 50% rabatt
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Skapare och designers</h3>
-              <p className="text-gray-600">
-                Börja tjäna pengar på din publik eller konst utan förskottsinvestering. Att sälja anpassad merchandise är det bästa sättet att hålla din kreativa passion vid liv.
+              
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Tryck egna kläder –<br />
+                <span className="text-orange-500">snabbt, enkelt</span> och professionellt
+              </h1>
+              
+              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
+                Behöver ni profilkläder till företaget, tröjor till ett event eller en unik present? Hos Tryckeget kan du designa och beställa allt från en enda t-shirt till hundratals hoodies – direkt online.
               </p>
+              
+              {/* Trust Signals */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-6 mb-8 text-sm text-gray-600">
+                <div className="flex items-center bg-white px-4 py-2 rounded-lg shadow-sm">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Leverans inom 5–7 dagar
+                </div>
+                <div className="flex items-center bg-white px-4 py-2 rounded-lg shadow-sm">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Inga minimiordrar
+                </div>
+                <div className="flex items-center bg-white px-4 py-2 rounded-lg shadow-sm">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Enkelt designverktyg
+                </div>
             </div>
 
-            {/* Entrepreneurs */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🚀</span>
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link 
+                  href="/design/upload?productId=unisex-jersey-tshirt&size=M&color=Vit&quantity=1"
+                  className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  🎨 Skapa ditt plagg nu
+                </Link>
+                <Link 
+                  href="/products"
+                  className="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-gray-300 transition-all duration-200"
+                >
+                  Se alla produkter
+                </Link>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">E-handelsföretagare</h3>
-              <p className="text-gray-600">
-                Var din egen chef utan förskottskostnader. Att lansera eller utveckla din e-handelsverksamhet är nu lättare än någonsin.
-              </p>
+
+              {/* Payment Methods */}
+              <div className="mt-6">
+                <p className="text-sm text-gray-500 mb-3 text-center lg:text-left">Säkra betalningsmetoder:</p>
+                <div className="flex items-center justify-center lg:justify-start flex-wrap gap-3">
+                  <div className="bg-white px-3 py-2 rounded-lg">
+                    <img 
+                      src="/images/swish-logo.png" 
+                      alt="Swish" 
+                      className="h-6 w-auto"
+                    />
+                  </div>
+                  <img 
+                    src="/images/visa-mastercard-logo.png" 
+                    alt="Visa Mastercard" 
+                    className="h-6 w-auto"
+                  />
+                  <img 
+                    src="/images/american-express-logo.png" 
+                    alt="American Express" 
+                    className="h-5 w-auto"
+                  />
+                  <img 
+                    src="/images/Klarna_Payment_Badge.svg.png" 
+                    alt="Klarna" 
+                    className="h-6 w-auto"
+                  />
+                  <img 
+                    src="/images/apple-pay-logo.png" 
+                    alt="Apple Pay" 
+                    className="h-6 w-auto"
+                  />
+                  <img 
+                    src="/images/google-pay-logo.png" 
+                    alt="Google Pay" 
+                    className="h-6 w-auto"
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Brands */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-2xl">🏢</span>
+            {/* Right Content - Product Showcase */}
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Featured Products */}
+                <div className="space-y-4">
+                  <div className="bg-white rounded-xl shadow-lg p-4 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <img src={bulkProducts[0].images.main} alt={bulkProducts[0].name} className="w-full h-32 object-contain rounded-lg mb-3" />
+                    <h3 className="font-semibold text-gray-900 text-sm">{bulkProducts[0].name}</h3>
+                    <p className="text-orange-500 font-bold">Från {bulkProducts[0].price.base} {bulkProducts[0].price.currency}</p>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-lg p-4 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                    <img src={bulkProducts[1].images.main} alt={bulkProducts[1].name} className="w-full h-32 object-contain rounded-lg mb-3" />
+                    <h3 className="font-semibold text-gray-900 text-sm">{bulkProducts[1].name}</h3>
+                    <p className="text-orange-500 font-bold">Från {bulkProducts[1].price.base} {bulkProducts[1].price.currency}</p>
+                  </div>
+                </div>
+                <div className="space-y-4 mt-8">
+                  <div className="bg-white rounded-xl shadow-lg p-4 transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                    <img src={bulkProducts[2].images.main} alt={bulkProducts[2].name} className="w-full h-32 object-contain rounded-lg mb-3" />
+                    <h3 className="font-semibold text-gray-900 text-sm">{bulkProducts[2].name}</h3>
+                    <p className="text-orange-500 font-bold">Från {bulkProducts[2].price.base} {bulkProducts[2].price.currency}</p>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-lg p-4 transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                    <img src={bulkProducts[3].images.main} alt={bulkProducts[3].name} className="w-full h-32 object-contain rounded-lg mb-3" />
+                    <h3 className="font-semibold text-gray-900 text-sm">{bulkProducts[3].name}</h3>
+                    <p className="text-orange-500 font-bold">Från {bulkProducts[3].price.base} {bulkProducts[3].price.currency}</p>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Varumärken och företag</h3>
-              <p className="text-gray-600">
-                Lansera nya produkter, utöka din räckvidd eller flytta din befintliga merchandise till on-demand-produktion med bara några klick.
-              </p>
+              
+              {/* Floating Badge */}
+              <div className="absolute -top-4 -right-4 bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                Från 1 st
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+
       {/* Products Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-full mx-auto px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-            Kom igång gratis!
-          </h2>
-          
-          <div className="product-container">
-            {products.map((product) => (
-              <div 
+      <section className="relative -mt-10 pb-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Product Categories */}
+          <div className="space-y-0">
+            {/* Kläder Category */}
+            <div>
+              {/* Dark Grey Header */}
+              <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Populära kläder</h3>
+                <div className="flex items-center space-x-2">
+                  <Link href="/kategori/klader" className="text-orange-300 hover:text-orange-200 text-sm font-medium">
+                    Se alla →
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Product Cards Row */}
+              <div className="bg-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                  {productsByCategory['Kläder'].map((product) => (
+                    <Link 
+                      key={product.id} 
+                      href={`/produkter/${product.id}`}
+                      className="group bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full"
+                    >
+                      {/* Product Image Container */}
+                      <div className="relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                        <img
+                          className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                          src={product.images.main}
+                          alt={product.name}
+                        />
+                        
+                        {/* Bulk Badge */}
+                        <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+                          BULK
+                        </div>
+                        
+                        {/* Wishlist Button */}
+                        <div className="absolute top-3 right-3">
+                          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors">
+                            <Heart className="h-4 w-4 text-gray-600" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="p-4 flex flex-col flex-grow">
+                        {/* Delivery Info */}
+                        <div className="text-green-600 text-sm font-medium mb-2">
+                          {product.leadTime}
+                        </div>
+                        
+                        <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-orange-500 transition-colors">
+                          {product.name}
+                        </h3>
+                        
+                        {/* Min Order Info */}
+                        <p className="text-gray-500 text-xs mb-3">
+                          Min beställning: {product.minOrder} st
+                        </p>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg font-bold text-orange-500">
+                              Från {product.price.base} {product.price.currency}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-orange-500 text-sm font-medium">
+                            {product.bulkDiscount}
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2 mt-auto">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price.base,
+                                currency: product.price.currency,
+                                image: product.images.main,
+                                category: product.category
+                              });
+                              alert('Produkten har lagts till i varukorgen!');
+                            }}
+                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Lägg i varukorg
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleProductClick(product.id);
+                            }}
+                            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Börja designa
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Accessoarer Category */}
+            <div>
+              {/* Dark Grey Header */}
+              <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Populära accessoarer</h3>
+                <div className="flex items-center space-x-2">
+                  <Link href="/kategori/accessoarer" className="text-orange-300 hover:text-orange-200 text-sm font-medium">
+                    Se alla →
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Product Cards Row */}
+              <div className="bg-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                  {productsByCategory['Accessoarer'].map((product) => (
+                    <Link 
+                      key={product.id} 
+                      href={`/produkter/${product.id}`}
+                      className="group bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full"
+                    >
+                      {/* Product Image Container */}
+                      <div className="relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                        <img
+                          className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                          src={product.images.main}
+                          alt={product.name}
+                        />
+                        
+                        {/* Bulk Badge */}
+                        <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+                          BULK
+                        </div>
+                        
+                        {/* Wishlist Button */}
+                        <div className="absolute top-3 right-3">
+                          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors">
+                            <Heart className="h-4 w-4 text-gray-600" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="p-4 flex flex-col flex-grow">
+                        {/* Delivery Info */}
+                        <div className="text-green-600 text-sm font-medium mb-2">
+                          {product.leadTime}
+                        </div>
+                        
+                        <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-orange-500 transition-colors">
+                          {product.name}
+                        </h3>
+                        
+                        {/* Min Order Info */}
+                        <p className="text-gray-500 text-xs mb-3">
+                          Min beställning: {product.minOrder} st
+                        </p>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg font-bold text-orange-500">
+                              Från {product.price.base} {product.price.currency}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-orange-500 text-sm font-medium">
+                            {product.bulkDiscount}
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2 mt-auto">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price.base,
+                                currency: product.price.currency,
+                                image: product.images.main,
+                                category: product.category
+                              });
+                              alert('Produkten har lagts till i varukorgen!');
+                            }}
+                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Lägg i varukorg
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleProductClick(product.id);
+                            }}
+                            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Börja designa
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Hem & Inredning Category */}
+            <div>
+              {/* Dark Grey Header */}
+              <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Populära hem & inredning</h3>
+                <div className="flex items-center space-x-2">
+                  <Link href="/kategori/hem-inredning" className="text-orange-300 hover:text-orange-200 text-sm font-medium">
+                    Se alla →
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Product Cards Row */}
+              <div className="bg-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                  {productsByCategory['Hem & Inredning'].map((product) => (
+              <Link 
                 key={product.id} 
-                className="product-item"
-                onClick={() => handleProductClick(product.id)}
+                href={`/produkter/${product.id}`}
+                      className="group bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full"
               >
-                <GlareCard className="flex flex-col items-center justify-end p-6 h-full">
+                      {/* Product Image Container */}
+                      <div className="relative overflow-hidden bg-gray-50 flex items-center justify-center">
                   <img
-                    className="h-full w-full absolute inset-0 object-cover"
+                          className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
                     src={product.images.main}
                     alt={product.name}
                   />
-                  <div className="relative z-10 text-center product-content">
-                    <h3 className="font-bold text-white text-lg mb-2">{product.name}</h3>
-                    <div className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors inline-block">
-                      Visa produkt
-                    </div>
-                  </div>
-                </GlareCard>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                        
+                        {/* Bulk Badge */}
+                        <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+                          BULK
+                        </div>
+                        
+                        {/* Wishlist Button */}
+                        <div className="absolute top-3 right-3">
+                          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors">
+                            <Heart className="h-4 w-4 text-gray-600" />
+                          </button>
+                        </div>
+                      </div>
 
-      {/* Process Section */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-            Anpassade print-on-demand produkter i 5 steg
-          </h2>
-          <p className="text-center text-gray-600 mb-12 text-lg max-w-3xl mx-auto">
-            Få omedelbar tillgång till automatiserad teknik som ger dig print-on-demand dropshipping-uppfyllelse. Att skapa och sälja anpassade produkter är en snabb och enkel process.
-          </p>
-          
-          <div className="grid md:grid-cols-5 gap-8 text-center">
-            {[
-              { step: '1', title: 'Välj', desc: 'Välj produkt' },
-              { step: '2', title: 'Anpassa', desc: 'Lägg till design' },
-              { step: '3', title: 'Förhandsvisa', desc: 'Eller beställ prov' },
-              { step: '4', title: 'Publicera', desc: 'I din butik' },
-              { step: '5', title: 'Slappna av', desc: 'Vi sköter resten' }
-            ].map((item, index) => (
-              <div key={index}>
-                <div className="w-16 h-16 bg-black text-white rounded-full mx-auto mb-4 flex items-center justify-center text-xl font-bold">
-                  {item.step}
+                      {/* Product Info */}
+                      <div className="p-4 flex flex-col flex-grow">
+                        {/* Delivery Info */}
+                        <div className="text-green-600 text-sm font-medium mb-2">
+                          {product.leadTime}
+                        </div>
+                        
+                        <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-orange-500 transition-colors">
+                          {product.name}
+                        </h3>
+                        
+                        {/* Min Order Info */}
+                        <p className="text-gray-500 text-xs mb-3">
+                          Min beställning: {product.minOrder} st
+                        </p>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg font-bold text-orange-500">
+                              Från {product.price.base} {product.price.currency}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-orange-500 text-sm font-medium">
+                            {product.bulkDiscount}
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2 mt-auto">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price.base,
+                                currency: product.price.currency,
+                                image: product.images.main,
+                                category: product.category
+                              });
+                              alert('Produkten har lagts till i varukorgen!');
+                            }}
+                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Lägg i varukorg
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleProductClick(product.id);
+                            }}
+                            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Börja designa
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.desc}</p>
               </div>
-            ))}
+            </div>
+
+            {/* Kontorsartiklar Category */}
+            <div>
+              {/* Dark Grey Header */}
+              <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Populära kontorsartiklar</h3>
+                <div className="flex items-center space-x-2">
+                  <Link href="/kategori/kontorsartiklar" className="text-orange-300 hover:text-orange-200 text-sm font-medium">
+                    Se alla →
+                  </Link>
+                  </div>
+              </div>
+              
+              {/* Product Cards Row */}
+              <div className="bg-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
+                  {productsByCategory['Kontorsartiklar'].map((product) => (
+                    <Link 
+                      key={product.id} 
+                      href={`/produkter/${product.id}`}
+                      className="group bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col h-full"
+                    >
+                      {/* Product Image Container */}
+                      <div className="relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                        <img
+                          className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                          src={product.images.main}
+                          alt={product.name}
+                        />
+                        
+                        {/* Bulk Badge */}
+                        <div className="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+                          BULK
+                        </div>
+                        
+                        {/* Wishlist Button */}
+                        <div className="absolute top-3 right-3">
+                          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors">
+                            <Heart className="h-4 w-4 text-gray-600" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="p-4 flex flex-col flex-grow">
+                        {/* Delivery Info */}
+                        <div className="text-green-600 text-sm font-medium mb-2">
+                          {product.leadTime}
+                        </div>
+                        
+                        <h3 className="font-semibold text-gray-900 text-sm mb-2 group-hover:text-orange-500 transition-colors">
+                          {product.name}
+                        </h3>
+                        
+                        {/* Min Order Info */}
+                        <p className="text-gray-500 text-xs mb-3">
+                          Min beställning: {product.minOrder} st
+                        </p>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg font-bold text-orange-500">
+                              Från {product.price.base} {product.price.currency}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-orange-500 text-sm font-medium">
+                            {product.bulkDiscount}
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2 mt-auto">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price.base,
+                                currency: product.price.currency,
+                                image: product.images.main,
+                                category: product.category
+                              });
+                              alert('Produkten har lagts till i varukorgen!');
+                            }}
+                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Lägg i varukorg
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleProductClick(product.id);
+                            }}
+                            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-medium transition-colors text-sm"
+                          >
+                            Börja designa
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl mb-4">🆓</div>
-              <h3 className="font-bold text-gray-900 mb-2">100% gratis</h3>
-              <p className="text-gray-600 text-sm">
-                Använd vår produktskapare för att skapa produkter och publicera mockups med anpassade designer.
+      {/* Rest of the sections remain the same... */}
+      {/* Target Groups Section */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white border-l border-r border-gray-200">
+            <div className="bg-gray-800 text-white px-6 py-4">
+              <h2 className="text-xl font-bold">Målgrupper</h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-0">
+              <div className="p-6 border-r border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Företag</h3>
+                <p className="text-gray-600 text-sm">
+                  Profilkläder, eventprodukter och marknadsföringsmaterial för ditt företag.
+                </p>
+              </div>
+              <div className="p-6 border-r border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Events</h3>
+                <p className="text-gray-600 text-sm">
+                  Tröjor, kepsar och accessoarer för konferenser, möten och evenemang.
+                </p>
+              </div>
+              <div className="p-6 border-r border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Privatpersoner</h3>
+                <p className="text-gray-600 text-sm">
+                  Unika gåvor, personliga kläder och skapande för dig och dina nära.
+                </p>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Skolor</h3>
+                <p className="text-gray-600 text-sm">
+                  Skoltröjor, klasskläder och evenemangsmaterial för utbildning.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white border-l border-r border-gray-200">
+            <div className="bg-gray-800 text-white px-6 py-4">
+              <h2 className="text-xl font-bold">Så fungerar det</h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-0">
+              <div className="p-6 border-r border-gray-200">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-orange-600 font-bold text-lg">1</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Välj produkt</h3>
+                <p className="text-gray-600 text-sm">
+                  Bläddra genom våra produkter och välj det som passar dina behov.
+                </p>
+              </div>
+              <div className="p-6 border-r border-gray-200">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-orange-600 font-bold text-lg">2</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Designa</h3>
+                <p className="text-gray-600 text-sm">
+                  Använd vårt enkla designverktyg för att skapa din unika design.
+                </p>
+              </div>
+              <div className="p-6 border-r border-gray-200">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-orange-600 font-bold text-lg">3</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Beställ</h3>
+                <p className="text-gray-600 text-sm">
+                  Lägg till i kundvagnen och slutför din beställning säkert.
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-orange-600 font-bold text-lg">4</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Få levererat</h3>
+                <p className="text-gray-600 text-sm">
+                  Vi trycker och levererar dina produkter inom 5-7 arbetsdagar.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Tryckeget Section */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Varför välja Tryckeget?
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Vi erbjuder den bästa kombinationen av kvalitet, pris och service för alla dina tryckbehov.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">⚡</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Snabb leverans</h3>
+              <p className="text-gray-600">
+                Vi levererar dina produkter inom 5-7 arbetsdagar över hela Sverige.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">🎨</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Enkelt designverktyg</h3>
+              <p className="text-gray-600">
+                Vårt intuitiva designverktyg gör det enkelt att skapa professionella designs.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">💎</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Hög kvalitet</h3>
+              <p className="text-gray-600">
+                Vi använder endast högkvalitativa material och avancerade trycktekniker.
               </p>
             </div>
             
-            <div>
-              <div className="text-4xl mb-4">👕</div>
-              <h3 className="font-bold text-gray-900 mb-2">1 300+ unika produkter</h3>
-              <p className="text-gray-600 text-sm">
-                T-shirts, hoodies, skor, väskor, strumpor, hattar, telefonfodral, muggar, klistermärken och mer.
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">💰</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Konkurrenskraftiga priser</h3>
+              <p className="text-gray-600">
+                Vi erbjuder de bästa priserna på marknaden utan att kompromissa på kvalitet.
               </p>
             </div>
             
-            <div>
-              <div className="text-4xl mb-4">🌍</div>
-              <h3 className="font-bold text-gray-900 mb-2">Globalt nätverk</h3>
-              <p className="text-gray-600 text-sm">
-                Mer än 140 tryckfaciliteter i USA, Kanada, EU, Storbritannien, Australien och Kina.
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">🚚</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Inga minimiordrar</h3>
+              <p className="text-gray-600">
+                Beställ från en enda produkt till hundratals - vi har inga minimiordrar.
               </p>
             </div>
             
-            <div>
-              <div className="text-4xl mb-4">⚡</div>
-              <h3 className="font-bold text-gray-900 mb-2">Snabb leverans</h3>
-              <p className="text-gray-600 text-sm">
-                Automatiserad orderhantering och snabb leverans direkt till dina kunder.
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-orange-600 text-xl">🛡️</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Säker betalning</h3>
+              <p className="text-gray-600">
+                Vi använder endast säkra betallösningar för att skydda dina uppgifter.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Detailed Description Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8">
-            Enkelt att förverkliga dina idéer
-          </h2>
-          <p className="text-lg text-gray-600 mb-6">
-            Vi vill göra det enkelt för alla att ta fram personliga plagg och accessoarer, oavsett om det gäller företag, event, svensexor, skolklasser eller bara en kul present. Beställ precis så många du vill – från 1 produkt till hundratals – och få allt levererat hem till dörren på bara 5–7 dagar.
-          </p>
-          <p className="text-lg text-gray-600 mb-8">
-            Till skillnad från traditionella tryckerier slipper du krångliga offertförfrågningar, långa leveranstider och stora minimiordrar. Här är allt digitalt, modernt och transparent – du ser priset direkt och kan själv skapa något unikt på bara några minuter.
-          </p>
-          <div className="text-center">
-            <button className="bg-black text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors">
-              👉 Upptäck hur enkelt det är
-            </button>
+      {/* Reviews Section */}
+      <section className="bg-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Dark Grey Header */}
+          <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+            <h2 className="text-xl font-bold">Vad våra kunder säger</h2>
           </div>
-        </div>
-      </section>
-
-      {/* Pros and Cons */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-            Fördelar med Print On Demand
-          </h2>
           
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-green-600 mb-6">Fördelar</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-3">✓</span>
-                  <div>
-                    <strong>Ingen risk.</strong> Ingen investering i merchandise du inte sålt än. Inga lokaler att hyra eller personal att anställa.
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-3">✓</span>
-                  <div>
-                    <strong>Nybörjarvänligt.</strong> Ingen erfarenhet behövs. Registrera dig gratis och börja designa produkter.
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-3">✓</span>
-                  <div>
-                    <strong>Inget lager.</strong> Inget krångel med att hålla lager av merchandise lagrade någonstans.
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-3">✓</span>
-                  <div>
-                    <strong>Global kundbas.</strong> Tilltala kunder över hela världen med unika designer och produkter.
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-500 mr-3">✓</span>
-                  <div>
-                    <strong>Mångfald.</strong> Mångsidiga produkter och de bästa on-demand-tryckalternativen.
-                  </div>
-                </li>
-              </ul>
+          {/* Content Row */}
+          <div className="bg-white border-l border-r border-gray-200">
+            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-0">
+            {/* Företagsrecensioner */}
+            <div className="p-6 border-r border-gray-200">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  ⭐⭐⭐⭐⭐
+                </div>
+                <span className="ml-2 text-sm text-gray-600">5.0</span>
+              </div>
+                      <p className="text-gray-600 mb-4">
+                        &ldquo;Vi beställde profilkläder till ett säljevent och blev väldigt nöjda. Processen var smidig från början till slut – enkelt att designa, tydliga priser och snabb leverans. Tryckeget gör det lätt för oss att få fram professionella kläder när vi behöver dem.&rdquo;
+                      </p>
+              <div className="font-semibold text-gray-900">Expand Invest AB</div>
+              <div className="text-sm text-gray-500">🏢 Företagskund</div>
             </div>
             
-            <div>
-              <h3 className="text-2xl font-bold text-red-600 mb-6">Nackdelar</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="text-red-500 mr-3">×</span>
-                  <div>
-                    <strong>Delat ansvar.</strong> Medan tryckproviders hanterar orderuppfyllelse, kommer kunder att vända sig till handlaren med problem och frågor.
+            <div className="p-6 border-r border-gray-200">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  ⭐⭐⭐⭐⭐
+                </div>
+                <span className="ml-2 text-sm text-gray-600">5.0</span>
+              </div>
+                      <p className="text-gray-600 mb-4">
+                        &ldquo;Som företag inom marknadsföring har vi ofta behov av specialtryck till kampanjer och events. Tryckeget levererade både kvalitet och snabbhet. Vi uppskattar särskilt att vi kan beställa i små volymer utan att kompromissa på servicenivån.&rdquo;
+                      </p>
+              <div className="font-semibold text-gray-900">Gotlin Holding AB</div>
+              <div className="text-sm text-gray-500">🏢 Företagskund</div>
+            </div>
+            
+            <div className="p-6 border-r border-gray-200">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  ⭐⭐⭐⭐⭐
                   </div>
-                </li>
-              </ul>
+                <span className="ml-2 text-sm text-gray-600">5.0</span>
+                  </div>
+                      <p className="text-gray-600 mb-4">
+                        &ldquo;Vi tryckte t-shirt och vi älskade resultatet! Kvaliteten var fantastisk och processen var enkel från början till slut.&rdquo;
+                      </p>
+              <div className="font-semibold text-gray-900">Solvify AB</div>
+              <div className="text-sm text-gray-500">🏢 Företagskund</div>
+              <div className="text-xs text-gray-400 mt-1">Kevin Negash, VD</div>
+                  </div>
+            
+            {/* Privatpersoner */}
+            <div className="p-6 border-r border-gray-200">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  ⭐⭐⭐⭐⭐
+                  </div>
+                <span className="ml-2 text-sm text-gray-600">5.0</span>
+                  </div>
+                      <p className="text-gray-600 mb-4">
+                        &ldquo;Jag beställde t-shirts till en möhippa och det blev en succé! Designverktyget var lätt att använda och resultatet blev till och med bättre än jag hade föreställt mig. Leveransen kom snabbt och alla i gänget älskade tröjorna.&rdquo;
+                      </p>
+              <div className="font-semibold text-gray-900">Lisa Johansson</div>
+              <div className="text-sm text-gray-500">👤 Privatkund</div>
+            </div>
+            
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  ⭐⭐⭐⭐⭐
+                </div>
+                <span className="ml-2 text-sm text-gray-600">5.0</span>
+              </div>
+                      <p className="text-gray-600 mb-4">
+                        &ldquo;Vi i klassen tryckte hoodies inför skolavslutningen och är supernöjda. Alla fick välja sin storlek och designen såg exakt ut som vi ville. Snabb leverans och riktigt skön kvalitet på tröjorna.&rdquo;
+                      </p>
+              <div className="font-semibold text-gray-900">Kalle Edström</div>
+              <div className="text-sm text-gray-500">👤 Privatkund</div>
+                  </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 bg-black text-white text-center">
-        <div className="max-w-4xl mx-auto px-8">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Starta din egen print-on-demand verksamhet!
+      {/* Final CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Redo att börja skapa?
           </h2>
-          <button className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
-            Börja designa
-          </button>
+          <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+            Gå med tusentals nöjda kunder som redan har skapat sina unika designs hos oss.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/design/upload?productId=unisex-jersey-tshirt&size=M&color=Vit&quantity=1"
+              className="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-orange-600 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg"
+            >
+              🎨 Börja designa nu
+            </Link>
+            <Link 
+              href="/contact"
+              className="inline-flex items-center justify-center bg-transparent hover:bg-white/10 text-white px-8 py-4 rounded-lg text-lg font-semibold border-2 border-white transition-all duration-200"
+            >
+              Kontakta oss
+            </Link>
+          </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

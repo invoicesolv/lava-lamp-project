@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'printexpress.pl',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

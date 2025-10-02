@@ -1,4 +1,3 @@
-import { PrintOnDemandNavbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 
 interface PageLayoutProps {
@@ -7,12 +6,10 @@ interface PageLayoutProps {
   description?: string;
 }
 
-export default function PageLayout({ children, title, description }: PageLayoutProps) {
+export function PageLayout({ children, title, description }: PageLayoutProps) {
   return (
     <div className="min-h-screen bg-white">
-      <PrintOnDemandNavbar />
-      
-      <main className="pt-24">
+      <main>
         {title && (
           <div className="bg-gray-50 py-12">
             <div className="max-w-6xl mx-auto px-8 text-center">

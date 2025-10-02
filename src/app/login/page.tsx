@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { submitForm, FormData, validateEmail } from '@/lib/form-utils';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -19,6 +18,10 @@ export default function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -27,10 +30,39 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setSubmitStatus({ type: null, message: '' });
+
+    // Validate email
+    if (!validateEmail(formData.email)) {
+      setSubmitStatus({ type: 'error', message: 'Vänligen ange en giltig e-postadress.' });
       setIsLoading(false);
-      alert('Login functionality will be implemented with authentication service');
-    }, 2000);
+      return;
+    }
+
+    try {
+      const formSubmissionData: FormData = {
+        email: formData.email,
+        password: formData.password,
+        form_type: 'login_attempt',
+        service_category: 'user_authentication'
+      };
+
+      const result = await submitForm(formSubmissionData);
+      
+      if (result.success) {
+        setSubmitStatus({ 
+          type: 'success', 
+          message: 'Inloggningsförsök registrerat. Autentiseringstjänst kommer att implementeras snart.'
+        });
+      } else {
+        setSubmitStatus({ type: 'error', message: result.message || 'Ett fel uppstod. Försök igen.' });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitStatus({ type: 'error', message: 'Ett fel uppstod. Försök igen.' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -39,10 +71,10 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-4">
-              Welcome Back
+              Välkommen tillbaka
             </h1>
             <p className="text-muted-foreground">
-              Sign in to your account to continue designing amazing products
+              Logga in på ditt konto för att fortsätta designa fantastiska produkter
             </p>
           </div>
 
@@ -53,7 +85,7 @@ export default function LoginPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email">E-postadress</Label>
                   <div className="relative mt-1">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -69,7 +101,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Lösenord</Label>
                   <div className="relative mt-1">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -91,6 +123,22 @@ export default function LoginPage() {
                   </div>
                 </div>
 
+                {/* Status Messages */}
+                {submitStatus.type && (
+                  <div className={`p-3 rounded-lg flex items-center gap-2 ${
+                    submitStatus.type === 'success' 
+                      ? 'bg-green-50 text-green-800 border border-green-200' 
+                      : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}>
+                    {submitStatus.type === 'success' ? (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <AlertCircle className="h-4 w-4 text-red-600" />
+                    )}
+                    <span className="text-sm">{submitStatus.message}</span>
+                  </div>
+                )}
+
                 <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
                   {isLoading ? "Signing in..." : (
                     <>
@@ -103,9 +151,9 @@ export default function LoginPage() {
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
-                  Don't have an account?{' '}
+                  Don&apos;t have an account?{' '}
                   <Link href="/register" className="text-primary hover:underline font-medium">
-                    Sign up here
+                    Registrera dig här
                   </Link>
                 </p>
               </div>

@@ -1,17 +1,20 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 import { PageLayout } from '@/components/page-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Upload, FileImage, FileText, AlertTriangle, CheckCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
+import { getProductById } from '@/data/products';
+import { bulkProducts } from '@/data/bulk-products';
 
 interface DesignFile {
   id?: string;
@@ -29,23 +32,40 @@ interface DesignFile {
   warnings: string[];
 }
 
-export default function DesignUploadPage() {
+
+function DesignUploadContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  // Get product info from URL params or state
-  const productId = searchParams.get('productId');
-  const productName = searchParams.get('productName') || 'Custom Product';
+  // Get product info from URL params
+  const productId = searchParams.get('productId') || 'unisex-jersey-tshirt';
   const quantity = parseInt(searchParams.get('quantity') || '1');
+  const selectedSize = searchParams.get('size') || 'M';
+  const selectedColor = searchParams.get('color') || 'Vit';
+  
+  // Get product data from bulk products first, then fallback to regular products
+  const bulkProduct = bulkProducts.find(p => p.id === productId);
+  const regularProduct = getProductById(productId);
+  
+  const product = bulkProduct || regularProduct || {
+    id: 'unisex-jersey-tshirt',
+    name: 'Unisex Jersey T-shirt',
+    shortDescription: 'Klassisk bomulls-t-shirt för alla tillfällen',
+    price: { base: 199, currency: 'SEK' },
+    images: { main: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500' },
+    category: 'Kläder',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    colors: ['Vit', 'Svart', 'Navy', 'Grå', 'Röd', 'Blå']
+  };
   
   const [uploadedFiles, setUploadedFiles] = useState<DesignFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [previewMode, setPreviewMode] = useState<'front' | 'back'>('front');
-  const [designPosition, setDesignPosition] = useState({ x: 50, y: 50 }); // Position as percentage
+  const [selectedPrintArea, setSelectedPrintArea] = useState<'right-chest' | 'left-chest' | 'back'>('right-chest');
   const [designSize, setDesignSize] = useState(24); // Size in units (24 = default 96px)
+  const [designPosition, setDesignPosition] = useState({ x: 50, y: 50 }); // Position within print area (percentage)
   const [isDragging, setIsDragging] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!acceptedFiles.length) return;
@@ -139,40 +159,80 @@ export default function DesignUploadPage() {
   };
 
   // Handle drag functionality for design positioning
+
+
+
+
+  const proceedToCanvas = () => {
+    if (uploadedFiles.length === 0) {
+      alert('Please upload at least one design file to continue.');
+      return;
+    }
+    
+    // For now, just show success message
+    alert('Design uploaded! Canvas designer will be available soon.');
+  };
+
+  // Product images for front/back view
+  const productImages = {
+    front: product.images.main,
+    back: (product.images as any).gallery?.[1] || product.images.main // Use second gallery image for back, fallback to main
+  };
+
+  // Print area definitions (position and size as percentages)
+  const printAreas = {
+    'right-chest': { x: 60, y: 30, width: 30, height: 20, label: 'Höger bröst' },
+    'left-chest': { x: 40, y: 30, width: 30, height: 20, label: 'Vänster bröst' },
+    'back': { x: 50, y: 50, width: 55, height: 45, label: 'Rygg' }
+  };
+
+  // Size controls
+  const increaseSize = () => {
+    setDesignSize(prev => Math.min(60, prev + 4));
+  };
+
+  const decreaseSize = () => {
+    setDesignSize(prev => Math.max(8, prev - 4));
+  };
+
+  const resetSize = () => {
+    setDesignSize(24);
+  };
+
+  // Drag functionality within print area
   const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
     setIsDragging(true);
     
-    const previewContainer = e.currentTarget.parentElement?.parentElement;
-    if (!previewContainer) return;
-    
-    // Get initial position from mouse or touch
     const startX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
     const startY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
     const startPosition = { ...designPosition };
     
+    // Get the print area container from the current target
+    const printAreaContainer = (e.currentTarget as HTMLElement).closest('[data-print-area]');
+    if (!printAreaContainer) return;
+    
     const handlePointerMove = (moveEvent: MouseEvent | TouchEvent) => {
       moveEvent.preventDefault();
       
-      // Get current position from mouse or touch
       const currentX = 'clientX' in moveEvent ? moveEvent.clientX : (moveEvent as TouchEvent).touches[0].clientX;
       const currentY = 'clientY' in moveEvent ? moveEvent.clientY : (moveEvent as TouchEvent).touches[0].clientY;
       
       const deltaX = currentX - startX;
       const deltaY = currentY - startY;
       
-      const rect = previewContainer.getBoundingClientRect();
+      const rect = printAreaContainer.getBoundingClientRect();
       
-      // Convert pixel movement to percentage
+      // Convert pixel movement to percentage within the print area
       const deltaXPercent = (deltaX / rect.width) * 100;
       const deltaYPercent = (deltaY / rect.height) * 100;
       
       let newX = startPosition.x + deltaXPercent;
       let newY = startPosition.y + deltaYPercent;
       
-      // Keep design within reasonable bounds
+      // Keep design within the print area bounds
       newX = Math.max(10, Math.min(90, newX));
       newY = Math.max(10, Math.min(90, newY));
       
@@ -188,138 +248,31 @@ export default function DesignUploadPage() {
       document.removeEventListener('touchend', handlePointerUp as EventListener);
     };
     
-    // Add both mouse and touch event listeners
     document.addEventListener('mousemove', handlePointerMove as EventListener);
     document.addEventListener('mouseup', handlePointerUp as EventListener);
     document.addEventListener('touchmove', handlePointerMove as EventListener);
     document.addEventListener('touchend', handlePointerUp as EventListener);
   };
 
-  // Handle design resizing with mouse wheel
-  const handleWheel = (e: React.WheelEvent) => {
-    if (uploadedFiles.length === 0 || !uploadedFiles[0].url) return;
+  // Update design position when print area changes
+  const handlePrintAreaChange = (area: 'right-chest' | 'left-chest' | 'back') => {
+    setSelectedPrintArea(area);
     
-    e.preventDefault();
-    
-    const delta = e.deltaY > 0 ? -2 : 2;
-    const newSize = Math.max(8, Math.min(60, designSize + delta));
-    
-    setDesignSize(newSize);
-  };
-
-  // Resize handles functionality
-  const handleResizeStart = (e: React.MouseEvent | React.TouchEvent, direction: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const startX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
-    const startY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
-    const startSize = designSize;
-    
-    setIsResizing(true);
-    
-    const handlePointerMove = (moveEvent: MouseEvent | TouchEvent) => {
-      moveEvent.preventDefault();
-      
-      const currentX = 'clientX' in moveEvent ? moveEvent.clientX : (moveEvent as TouchEvent).touches[0].clientX;
-      const currentY = 'clientY' in moveEvent ? moveEvent.clientY : (moveEvent as TouchEvent).touches[0].clientY;
-      
-      const deltaX = currentX - startX;
-      const deltaY = currentY - startY;
-      
-      let sizeDelta = 0;
-      
-      // Calculate size change based on direction
-      switch (direction) {
-        case 'se':
-          sizeDelta = (deltaX + deltaY) * 0.08;
-          break;
-        case 'nw':
-          sizeDelta = (-deltaX - deltaY) * 0.08;
-          break;
-        case 'ne':
-          sizeDelta = (deltaX - deltaY) * 0.08;
-          break;
-        case 'sw':
-          sizeDelta = (-deltaX + deltaY) * 0.08;
-          break;
-        case 'e':
-          sizeDelta = deltaX * 0.12;
-          break;
-        case 'w':
-          sizeDelta = -deltaX * 0.12;
-          break;
-        case 's':
-          sizeDelta = deltaY * 0.12;
-          break;
-        case 'n':
-          sizeDelta = -deltaY * 0.12;
-          break;
-      }
-      
-      const newSize = Math.max(8, Math.min(60, startSize + sizeDelta));
-      setDesignSize(newSize);
-    };
-    
-    const handlePointerUp = (upEvent: MouseEvent | TouchEvent) => {
-      upEvent.preventDefault();
-      setIsResizing(false);
-      document.removeEventListener('mousemove', handlePointerMove as EventListener);
-      document.removeEventListener('mouseup', handlePointerUp as EventListener);
-      document.removeEventListener('touchmove', handlePointerMove as EventListener);
-      document.removeEventListener('touchend', handlePointerUp as EventListener);
-    };
-    
-    document.addEventListener('mousemove', handlePointerMove as EventListener);
-    document.addEventListener('mouseup', handlePointerUp as EventListener);
-    document.addEventListener('touchmove', handlePointerMove as EventListener);
-    document.addEventListener('touchend', handlePointerUp as EventListener);
-  };
-
-  const increaseSize = () => {
-    setDesignSize(prev => Math.min(60, prev + 4));
-  };
-
-  const decreaseSize = () => {
-    setDesignSize(prev => Math.max(8, prev - 4));
-  };
-
-  const resetSize = () => {
-    setDesignSize(24);
-  };
-
-  const proceedToCanvas = () => {
-    if (uploadedFiles.length === 0) {
-      alert('Please upload at least one design file to continue.');
-      return;
+    // Auto-switch preview mode based on print area
+    if (area === 'back') {
+      setPreviewMode('back');
+    } else {
+      setPreviewMode('front');
     }
-    
-    // For now, just show success message
-    alert('Design uploaded! Canvas designer will be available soon.');
-  };
-
-  // Mock product data
-  const mockProduct = {
-    name: productName,
-    images: [
-      { 
-        url: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500',
-        angle: 'front'
-      },
-      { 
-        url: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500',
-        angle: 'back'
-      }
-    ]
   };
 
   return (
     <PageLayout>
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">Upload Your Design</h1>
+          <h1 className="text-4xl font-bold text-primary mb-4">Ladda upp din design</h1>
           <p className="text-xl text-muted-foreground">
-            Upload your design files and see how they'll look on your {mockProduct.name}
+            Ladda upp dina designfiler och se hur de kommer att se ut på din {product.name}
           </p>
         </div>
 
@@ -328,24 +281,29 @@ export default function DesignUploadPage() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Product Details</CardTitle>
+                <CardTitle>Produktdetaljer</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center space-x-4 mb-4">
                   <img
-                    src={mockProduct.images[0].url}
-                    alt={mockProduct.name}
+                    src={product.images.main}
+                    alt={product.name}
                     className="w-16 h-16 object-cover rounded"
                   />
                   <div>
-                    <h3 className="font-semibold">{mockProduct.name}</h3>
+                    <h3 className="font-semibold">{product.name}</h3>
                     <p className="text-sm text-muted-foreground">Quantity: {quantity}</p>
-                    <Badge variant="outline" className="mr-1 mt-1">
-                      Size: M
-                    </Badge>
-                    <Badge variant="outline" className="mr-1 mt-1">
-                      Color: Black
-                    </Badge>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      <Badge variant="outline">
+                        Size: {selectedSize}
+                      </Badge>
+                      <Badge variant="outline">
+                        Color: {selectedColor}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {product.price.base} {product.price.currency}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -353,9 +311,9 @@ export default function DesignUploadPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Upload Design Files</CardTitle>
+                <CardTitle>Ladda upp designfiler</CardTitle>
                 <CardDescription>
-                  Drag and drop your files or click to browse. Accepted formats: PNG, JPG, PDF, SVG
+                  Dra och släpp dina filer eller klicka för att bläddra. Godkända format: PNG, JPG, PDF, SVG
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -370,12 +328,12 @@ export default function DesignUploadPage() {
                   <input {...getInputProps()} />
                   <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                   {isDragActive ? (
-                    <p className="text-lg">Drop the files here ...</p>
+                    <p className="text-lg">Släpp filerna här ...</p>
                   ) : (
                     <div>
-                      <p className="text-lg mb-2">Drag & drop files here, or click to select</p>
+                      <p className="text-lg mb-2">Dra och släpp filer här, eller klicka för att välja</p>
                       <p className="text-sm text-muted-foreground">
-                        Maximum file size: 50MB. Up to 5 files.
+                        Maximal filstorlek: 50MB. Upp till 5 filer.
                       </p>
                     </div>
                   )}
@@ -437,118 +395,158 @@ export default function DesignUploadPage() {
 
           {/* Preview Section */}
           <div className="space-y-6">
+            {/* Print Area Selection */}
+            {uploadedFiles.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Choose Print Area</CardTitle>
+                  <CardDescription>
+                    Select where you want to place your design on the t-shirt
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handlePrintAreaChange('right-chest')}
+                      className={`p-4 border-2 rounded-lg text-center transition-all ${
+                        selectedPrintArea === 'right-chest'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">👔</div>
+                      <div className="font-medium">Höger bröst</div>
+                      <div className="text-sm text-muted-foreground">Standard logoplacering</div>
+                    </button>
+                    
+                    <button
+                      onClick={() => handlePrintAreaChange('left-chest')}
+                      className={`p-4 border-2 rounded-lg text-center transition-all ${
+                        selectedPrintArea === 'left-chest'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">👔</div>
+                      <div className="font-medium">Vänster bröst</div>
+                      <div className="text-sm text-muted-foreground">Alternativ logoplacering</div>
+                    </button>
+                    
+                    <button
+                      onClick={() => handlePrintAreaChange('back')}
+                      className={`p-4 border-2 rounded-lg text-center transition-all ${
+                        selectedPrintArea === 'back'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">🎨</div>
+                      <div className="font-medium">Rygg</div>
+                      <div className="text-sm text-muted-foreground">Stor designyta</div>
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Card>
               <CardHeader>
-                <CardTitle>Live Preview</CardTitle>
+                <CardTitle>Live-förhandsvisning</CardTitle>
                 <div className="flex space-x-2">
                   <Button
                     size="sm"
                     variant={previewMode === 'front' ? 'default' : 'outline'}
                     onClick={() => setPreviewMode('front')}
                   >
-                    Front
+                    Fram
                   </Button>
                   <Button
                     size="sm"
                     variant={previewMode === 'back' ? 'default' : 'outline'}
                     onClick={() => setPreviewMode('back')}
                   >
-                    Back
+                    Bak
                   </Button>
+                  {uploadedFiles.length > 0 && (
+                    <div className="ml-4 flex items-center text-sm text-muted-foreground">
+                      <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                        {printAreas[selectedPrintArea].label}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
                 <div 
                   className="aspect-square bg-muted/30 rounded-lg flex items-center justify-center relative overflow-hidden"
-                  onWheel={handleWheel}
                 >
                   {/* Product mockup */}
                   <img
-                    src={mockProduct.images.find((img: any) => img.angle === previewMode)?.url || mockProduct.images[0].url}
-                    alt={`${mockProduct.name} ${previewMode}`}
+                    src={productImages[previewMode]}
+                    alt={`${product.name} ${previewMode}`}
                     className="w-full h-full object-cover"
                   />
                   
-                  {/* Design overlay with drag and resize functionality */}
+                  {/* Print Area Boundary (fixed size, shows where design can go) */}
                   {uploadedFiles.length > 0 && uploadedFiles[0].url && (
-                    <div 
-                      className="absolute group hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50 rounded transition-all duration-200"
+                    <div
+                      data-print-area
+                      className="absolute border-2 border-dashed border-blue-400/50 rounded-md overflow-hidden"
                       style={{
-                        width: `${designSize * 4}px`,
-                        height: `${designSize * 4}px`,
-                        left: `${designPosition.x}%`,
-                        top: `${designPosition.y}%`,
+                        width: `${printAreas[selectedPrintArea].width}%`,
+                        height: `${printAreas[selectedPrintArea].height}%`,
+                        left: `${printAreas[selectedPrintArea].x}%`,
+                        top: `${printAreas[selectedPrintArea].y}%`,
                         transform: 'translate(-50%, -50%)',
-                        background: 'transparent',
-                        opacity: isDragging ? 0.8 : 1,
-                        minWidth: '32px',
-                        minHeight: '32px',
-                        maxWidth: '240px',
-                        maxHeight: '240px',
-                        border: '2px dashed rgba(59, 130, 246, 0.3)',
-                        borderRadius: '4px',
-                        zIndex: 2,
-                        cursor: isDragging ? 'grabbing' : 'grab'
+                        zIndex: 1,
+                        background: 'rgba(59, 130, 246, 0.05)'
                       }}
-                      onMouseDown={handlePointerDown}
-                      onTouchStart={handlePointerDown}
                     >
-                      <img
-                        src={uploadedFiles[0].url}
-                        alt="Design preview"
-                        className="pointer-events-none select-none w-full h-full"
-                        style={{ 
-                          objectFit: 'contain',
+                      {/* The actual design, which is draggable within this print area */}
+                      <div
+                        className="absolute group hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50 rounded transition-all duration-200 cursor-grab"
+                        style={{
+                          width: `${Math.max(designSize * 4, 80)}px`,
+                          height: `${Math.max(designSize * 4, 80)}px`,
+                          left: `${designPosition.x}%`,
+                          top: `${designPosition.y}%`,
+                          transform: 'translate(-50%, -50%)',
                           background: 'transparent',
-                          display: 'block'
+                          opacity: isDragging ? 0.8 : 1,
+                          border: '2px dashed rgba(59, 130, 246, 0.8)',
+                          borderRadius: '4px',
+                          zIndex: 2,
+                          minWidth: '80px',
+                          minHeight: '80px',
+                          maxWidth: '300px',
+                          maxHeight: '300px',
+                          pointerEvents: 'auto' // Ensure this element can receive pointer events
                         }}
-                        draggable={false}
-                      />
-                      
-                      {/* Resize handles - only show on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                        {/* Corner handles */}
-                        <div 
-                          className="absolute -top-2 -left-2 w-6 h-6 bg-blue-500 border border-white rounded-full cursor-nw-resize shadow-md hover:bg-blue-600 transition-colors" 
-                          onMouseDown={(e) => handleResizeStart(e, 'nw')}
-                          onTouchStart={(e) => handleResizeStart(e, 'nw')}
+                        onMouseDown={handlePointerDown}
+                        onTouchStart={handlePointerDown}
+                      >
+                        <img
+                          src={uploadedFiles[0].url}
+                          alt="Design preview"
+                          className="pointer-events-none select-none w-full h-full"
+                          style={{ 
+                            objectFit: 'contain',
+                            background: 'transparent',
+                            display: 'block'
+                          }}
+                          draggable={false}
                         />
-                        <div 
-                          className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 border border-white rounded-full cursor-ne-resize shadow-md hover:bg-blue-600 transition-colors" 
-                          onMouseDown={(e) => handleResizeStart(e, 'ne')}
-                          onTouchStart={(e) => handleResizeStart(e, 'ne')}
-                        />
-                        <div 
-                          className="absolute -bottom-2 -left-2 w-6 h-6 bg-blue-500 border border-white rounded-full cursor-sw-resize shadow-md hover:bg-blue-600 transition-colors" 
-                          onMouseDown={(e) => handleResizeStart(e, 'sw')}
-                          onTouchStart={(e) => handleResizeStart(e, 'sw')}
-                        />
-                        <div 
-                          className="absolute -bottom-2 -right-2 w-6 h-6 bg-blue-500 border border-white rounded-full cursor-se-resize shadow-md hover:bg-blue-600 transition-colors" 
-                          onMouseDown={(e) => handleResizeStart(e, 'se')}
-                          onTouchStart={(e) => handleResizeStart(e, 'se')}
-                        />
-                        
-                        {/* Center drag handle for moving */}
-                        <div 
-                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-green-500 border-2 border-white rounded-full cursor-move shadow-md hover:bg-green-600 transition-colors flex items-center justify-center"
-                          onMouseDown={handlePointerDown}
-                          onTouchStart={handlePointerDown}
-                        >
-                          <div className="w-3 h-3 bg-white rounded-full" />
-                        </div>
                       </div>
-                      
-                      {/* Size indicator */}
-                      <div className="absolute -top-8 left-0 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                        {Math.round((designSize / 24) * 100)}%
+                      {/* Print area label */}
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                        {printAreas[selectedPrintArea].label}
                       </div>
                     </div>
                   )}
                   
                   {uploadedFiles.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-muted-foreground">Upload a design to see preview</p>
+                      <p className="text-muted-foreground">Ladda upp en design för att se förhandsvisning</p>
                     </div>
                   )}
                 </div>
@@ -573,7 +571,7 @@ export default function DesignUploadPage() {
                         -
                       </Button>
                       <div className="flex-1 mx-2">
-                        <Input
+                        <input
                           type="range"
                           min="8"
                           max="60"
@@ -599,6 +597,12 @@ export default function DesignUploadPage() {
                       >
                         Reset
                       </Button>
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      {selectedPrintArea === 'back' 
+                        ? 'Large design area perfect for detailed graphics and text'
+                        : 'Standard logo placement area, ideal for company logos and small designs'
+                      }
                     </div>
                   </div>
                 )}
@@ -637,16 +641,16 @@ export default function DesignUploadPage() {
             <div className="flex justify-between">
               <Button variant="outline" onClick={() => router.back()}>
                 <RotateCcw className="mr-2 h-4 w-4" />
-                Back to Products
+                Tillbaka till produkter
               </Button>
               <div className="space-x-2">
                 <Button variant="outline" asChild>
                   <a href="/design/canvas">
-                    Canvas Designer
+                    Canvas-designer
                   </a>
                 </Button>
                 <Button onClick={proceedToCanvas} disabled={uploadedFiles.length === 0}>
-                  Continue to Review
+                  Fortsätt till granskning
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -655,5 +659,13 @@ export default function DesignUploadPage() {
         </div>
       </main>
     </PageLayout>
+  );
+}
+
+export default function DesignUploadPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DesignUploadContent />
+    </Suspense>
   );
 }

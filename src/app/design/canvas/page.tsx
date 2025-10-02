@@ -1,7 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { getProductById } from '@/data/products';
+import { bulkProducts } from '@/data/bulk-products';
+
+export const dynamic = 'force-dynamic';
 import { PageLayout } from '@/components/page-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,7 +35,7 @@ let Circle: any;
 let Rect: any;
 let FabricImage: any;
 
-export default function CanvasDesignerPage() {
+function CanvasDesignerContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -355,10 +359,24 @@ export default function CanvasDesignerPage() {
     "Trebuchet MS", "Comic Sans MS", "Impact", "Lucida Console"
   ];
 
-  // Mock product data
+  // Get product data from bulk products first, then fallback to regular products
+  const bulkProduct = bulkProducts.find(p => p.id === productId);
+  const regularProduct = productId ? getProductById(productId) : null;
+  const product = bulkProduct || regularProduct;
+  
+  // Product data for design tool
   const mockProduct = {
-    name: productName,
-    images: [
+    name: product?.name || productName,
+    images: product ? [
+      { 
+        url: product.images.main,
+        angle: 'front'
+      },
+      { 
+        url: (product.images as any).gallery?.[1] || product.images.main,
+        angle: 'back'
+      }
+    ] : [
       { 
         url: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500',
         angle: 'front'
@@ -716,5 +734,13 @@ export default function CanvasDesignerPage() {
         </div>
       </main>
     </PageLayout>
+  );
+}
+
+export default function CanvasDesignerPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CanvasDesignerContent />
+    </Suspense>
   );
 }

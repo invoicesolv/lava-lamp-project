@@ -4,7 +4,7 @@ import { PageLayout } from '@/components/page-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Scale, CreditCard, RefreshCw, FileText, Gavel, Info } from 'lucide-react';
+import { Scale, Info } from 'lucide-react';
 import Link from 'next/link';
 
 export default function TermsPage() {
@@ -13,60 +13,60 @@ export default function TermsPage() {
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Terms of Service
+            Användarvillkor
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            These terms govern your use of our print-on-demand platform and services. 
-            Please read them carefully before using our services.
+            Dessa villkor styr din användning av vår tryck-på-begäran-plattform och tjänster. 
+            Läs dem noggrant innan du använder våra tjänster.
           </p>
           <Badge variant="outline" className="text-sm px-4 py-2">
             <Scale className="mr-2 h-4 w-4" />
-            Last Updated: December 2024
+            Senast uppdaterad: December 2024
           </Badge>
         </div>
 
         <div className="space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle>1. Acceptance of Terms</CardTitle>
+              <CardTitle>1. Godkännande av villkor</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                By accessing and using our print-on-demand platform, you accept and agree to be bound by 
-                these Terms of Service. If you do not agree to these terms, please do not use our services.
+                Genom att komma åt och använda vår tryck-på-begäran-plattform accepterar och godkänner du att vara bunden av 
+                dessa användarvillkor. Om du inte godkänner dessa villkor, använd inte våra tjänster.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>2. Orders and Payments</CardTitle>
+              <CardTitle>2. Beställningar och betalningar</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                All orders are subject to acceptance. Payment is required at the time of order placement.
+                Alla beställningar är föremål för godkännande. Betalning krävs vid beställning.
               </p>
               <ul className="space-y-2 text-sm">
-                <li>• Prices are displayed in USD and subject to change</li>
-                <li>• We accept major credit cards and PayPal</li>
-                <li>• Orders cannot be modified once placed</li>
-                <li>• Bulk order discounts available</li>
+                <li>• Priser visas i SEK och kan komma att ändras</li>
+                <li>• Vi accepterar stora kreditkort och PayPal</li>
+                <li>• Beställningar kan inte modifieras efter att de lagts</li>
+                <li>• Bulkrabatter tillgängliga</li>
               </ul>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>3. Intellectual Property</CardTitle>
+              <CardTitle>3. Immateriella rättigheter</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                You retain ownership of your design files. We only use them to fulfill your orders.
+                Du behåller äganderätten till dina designfiler. Vi använder dem endast för att fullfölja dina beställningar.
               </p>
               <ul className="space-y-2 text-sm">
-                <li>• You warrant your designs don't infringe on third-party rights</li>
-                <li>• We're not responsible for copyright violations</li>
-                <li>• Our platform content is protected by copyright</li>
+                <li>• Du garanterar att dina design inte kränker tredje parts rättigheter</li>
+                <li>• Vi är inte ansvariga för upphovsrättsintrång</li>
+                <li>• Vårt plattformsinnehåll är skyddat av upphovsrätt</li>
               </ul>
             </CardContent>
           </Card>
@@ -75,16 +75,16 @@ export default function TermsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-900">
                 <Info className="h-5 w-5" />
-                Questions About These Terms?
+                Frågor om dessa villkor?
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-blue-800 mb-4">
-                If you have questions about these Terms of Service, please contact our legal team.
+                Om du har frågor om dessa användarvillkor, kontakta vårt juridiska team.
               </p>
               <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100" asChild>
                 <Link href="/contact">
-                  Contact Legal Team
+                  Kontakta juridiskt team
                 </Link>
               </Button>
             </CardContent>

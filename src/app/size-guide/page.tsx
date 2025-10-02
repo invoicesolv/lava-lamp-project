@@ -239,21 +239,21 @@ export default function SizeGuidePage() {
                     <div>
                       <h4 className="font-semibold mb-4">Tote Bags</h4>
                       <ul className="space-y-2 text-sm">
-                        <li><strong>Dimensions:</strong> 15" x 16" (38cm x 40cm)</li>
-                        <li><strong>Handle:</strong> 22" (56cm)</li>
+                        <li><strong>Dimensions:</strong> 15&quot; x 16&quot; (38cm x 40cm)</li>
+                        <li><strong>Handle:</strong> 22&quot; (56cm)</li>
                         <li><strong>Material:</strong> 100% cotton canvas</li>
                         <li><strong>Weight:</strong> 6 oz</li>
-                        <li><strong>Print Area:</strong> 12" x 12" (30cm x 30cm)</li>
+                        <li><strong>Print Area:</strong> 12&quot; x 12&quot; (30cm x 30cm)</li>
                       </ul>
                     </div>
                     <div>
                       <h4 className="font-semibold mb-4">Drawstring Bags</h4>
                       <ul className="space-y-2 text-sm">
-                        <li><strong>Dimensions:</strong> 17" x 20" (43cm x 51cm)</li>
+                        <li><strong>Dimensions:</strong> 17&quot; x 20&quot; (43cm x 51cm)</li>
                         <li><strong>Drawstring:</strong> Reinforced eyelets</li>
                         <li><strong>Material:</strong> Polyester</li>
                         <li><strong>Weight:</strong> Lightweight</li>
-                        <li><strong>Print Area:</strong> 13" x 13" (33cm x 33cm)</li>
+                        <li><strong>Print Area:</strong> 13&quot; x 13&quot; (33cm x 33cm)</li>
                       </ul>
                     </div>
                   </div>

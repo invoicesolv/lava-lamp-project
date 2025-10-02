@@ -1,54 +1,49 @@
 'use client';
 
 import { PageLayout } from '@/components/page-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Truck, 
   Clock, 
   Globe, 
   Package, 
-  MapPin,
   ArrowRight,
-  CheckCircle,
-  AlertTriangle,
-  Info
+  CheckCircle
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ShippingPage() {
   const domesticRates = [
-    { method: 'Standard Shipping', time: '5-7 business days', cost: '$4.99' },
-    { method: 'Express Shipping', time: '2-3 business days', cost: '$9.99' },
-    { method: 'Overnight Shipping', time: '1 business day', cost: '$19.99' }
+    { method: 'Standardfrakt', time: '5-7 arbetsdagar', cost: '49 kr' },
+    { method: 'Expressfrakt', time: '2-3 arbetsdagar', cost: '99 kr' },
+    { method: 'Nattfrakt', time: '1 arbetsdag', cost: '199 kr' }
   ];
 
   const internationalRates = [
-    { region: 'Canada', time: '7-10 business days', cost: '$12.99' },
-    { region: 'Europe (EU)', time: '10-14 business days', cost: '$15.99' },
-    { region: 'United Kingdom', time: '8-12 business days', cost: '$14.99' },
-    { region: 'Australia/New Zealand', time: '12-16 business days', cost: '$18.99' },
-    { region: 'Asia (Japan, Singapore)', time: '10-15 business days', cost: '$16.99' },
-    { region: 'Rest of World', time: '15-25 business days', cost: '$22.99' }
+    { region: 'Norden', time: '7-10 arbetsdagar', cost: '129 kr' },
+    { region: 'Europa (EU)', time: '10-14 arbetsdagar', cost: '159 kr' },
+    { region: 'Storbritannien', time: '8-12 arbetsdagar', cost: '149 kr' },
+    { region: 'Australien/Nya Zeeland', time: '12-16 arbetsdagar', cost: '189 kr' },
+    { region: 'Asien (Japan, Singapore)', time: '10-15 arbetsdagar', cost: '169 kr' },
+    { region: 'Resten av världen', time: '15-25 arbetsdagar', cost: '229 kr' }
   ];
 
   const processingInfo = [
     {
       icon: <Package className="h-6 w-6" />,
-      title: "Production Time",
-      description: "2-3 business days for printing and quality checks"
+      title: "Produktionstid",
+      description: "2-3 arbetsdagar för tryckning och kvalitetskontroll"
     },
     {
       icon: <Clock className="h-6 w-6" />,
-      title: "Order Processing",
-      description: "Orders placed before 2 PM EST ship the same day"
+      title: "Beställningshantering",
+      description: "Beställningar gjorda före 14:00 skickas samma dag"
     },
     {
       icon: <CheckCircle className="h-6 w-6" />,
-      title: "Quality Control",
-      description: "Every product is inspected before shipping"
+      title: "Kvalitetskontroll",
+      description: "Varje produkt inspekteras före leverans"
     }
   ];
 
@@ -58,21 +53,21 @@ export default function ShippingPage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Shipping Information
+            Fraktinformation
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Fast, reliable shipping worldwide. We handle everything from printing to delivery 
-            so you can focus on your business.
+            Snabb, pålitlig frakt världen över. Vi hanterar allt från tryckning till leverans 
+            så du kan fokusera på ditt företag.
           </p>
           <Badge variant="outline" className="text-sm px-4 py-2">
             <Globe className="mr-2 h-4 w-4" />
-            Worldwide Shipping Available
+            Global frakt tillgänglig
           </Badge>
         </div>
 
         {/* Processing Information */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-12">Production & Processing</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Produktion & hantering</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {processingInfo.map((info, index) => (
               <Card key={index} className="text-center hover:shadow-md transition-shadow">
@@ -90,20 +85,20 @@ export default function ShippingPage() {
 
         {/* CTA Section */}
         <div className="text-center bg-muted/30 rounded-2xl p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-4">Ready to Ship Your Designs?</h2>
+          <h2 className="text-3xl font-bold mb-4">Redo att skicka dina design?</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start your order today and we'll have it printed and on its way to you in no time.
+            Börja din beställning idag så har vi den tryckt och på väg till dig på nolltid.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link href="/products">
-                Start Designing
+              <Link href="/produkter">
+                Börja designa
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link href="/contact">
-                Shipping Questions?
+                Frågor om frakt?
               </Link>
             </Button>
           </div>
