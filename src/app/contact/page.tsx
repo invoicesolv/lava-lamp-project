@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PageLayout } from '@/components/page-layout';
+import { Breadcrumb } from '@/components/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -80,9 +81,16 @@ export default function ContactPage() {
     }
   };
 
+  const breadcrumbItems = [
+    { label: 'Hem', href: '/' },
+    { label: 'Kontakt' }
+  ];
+
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-16">
+    <>
+      <Breadcrumb items={breadcrumbItems} />
+      <PageLayout>
+        <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Kontakta oss
@@ -246,6 +254,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-    </PageLayout>
+      </PageLayout>
+    </>
   );
 }

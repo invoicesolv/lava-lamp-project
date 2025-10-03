@@ -1,6 +1,7 @@
 'use client';
 
 import { PageLayout } from '@/components/page-layout';
+import { Breadcrumb } from '@/components/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -64,8 +65,15 @@ export default function SizeGuidePage() {
     }
   ];
 
+  const breadcrumbItems = [
+    { label: 'Hem', href: '/' },
+    { label: 'Storleksguide' }
+  ];
+
   return (
-    <PageLayout>
+    <>
+      <Breadcrumb items={breadcrumbItems} />
+      <PageLayout>
       <div className="container mx-auto px-4 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -323,6 +331,7 @@ export default function SizeGuidePage() {
           </div>
         </div>
       </div>
-    </PageLayout>
+      </PageLayout>
+    </>
   );
 }

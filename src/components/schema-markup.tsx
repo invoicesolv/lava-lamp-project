@@ -243,3 +243,59 @@ export function ProductListSchemaMarkup({ products }: { products: any[] }) {
     />
   );
 }
+
+export function FAQSchemaMarkup() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Hur lång tid tar det att få mina produkter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standardleverans tar 5-7 arbetsdagar från att beställningen läggs. Express leverans (2-3 dagar) finns tillgänglig mot extra kostnad."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vilka filformat kan jag ladda upp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Vi accepterar PNG, JPG, SVG och PDF filer. För bästa kvalitet rekommenderar vi PNG eller SVG i hög upplösning (minst 300 DPI)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kan jag få prov på produkter innan jag beställer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja! Vi erbjuder provbeställningar för de flesta produkter. Kontakta vår kundservice för mer information om priser och leveranstider."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vad är er returpolicy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Vi erbjuder full återbetalning inom 30 dagar om produkten inte motsvarar dina förväntningar eller om det finns kvalitetsfel."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kan ni hjälpa mig med designen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolut! Vi har professionella designers som kan hjälpa dig skapa perfekta designs. Se vår designhjälp-sida för mer information."
+        }
+      }
+    ]
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
